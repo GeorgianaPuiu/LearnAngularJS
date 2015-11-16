@@ -76,6 +76,10 @@
     padding-left: 10px;
 }
 
+.tdata.first{
+    border-top: solid 1px lightblue;
+}
+
 .desc:after {
     content: '\1F53A';
 }
