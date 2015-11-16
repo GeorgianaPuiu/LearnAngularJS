@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="myCss.css">
+</head>
+
+
+<body ng-app="app">
+
+    <p ng-class="{header:true, centered:true, marginTop:true}">Products list</p>
+
+    <div ng-controller="ProductCtrl as ctrl" ng-class="{container:true}">
+
+        <table ng-class="{table:true}">
+            <tr >
+                <td  ng-repeat="detail in ctrl.productDetails" class="tdata">
+                   <span ng-click="ctrl.setOrderCriteria(detail.key)" ng-class="ctrl.getOrderClass(detail.key)">
+                     {{detail.value}} </span>
+                </td>
+            </tr>
+
+            <tr ng-repeat="product in ctrl.products | orderBy : ctrl.orderCriteria : ctrl.orderAsc" ng-class="{lightBlue: $odd, lightGray:$even, trow:true}">
+                <td ng-class="{tdata:true}">{{product.name}}</td>
+                <td ng-class="{tdata:true}">{{product.stock}}</td>
+                <td ng-class="{tdata:true}">{{product.price | currency}}</td>
+                <td ng-class="{tdata:true}">{{product.category}}</td>
+                <td ng-class="{tdata:true}">{{product.entryDate | date:'fullDate'}}</td>
+                <td ng-class="{tdata:true}">{{product.expDate | date :'fullDate'}}</td>
+            </tr>
+        </table>
+
+        <button type="button" ng-click="ctrl.setAddProductFlag(1)" ng-hide="ctrl.addProductFlag" ng-class="{button:true}" style="float:right">Add product</button>
+
+        <form name="addProductForm" ng-show="ctrl.addProductFlag" ng-submit="ctrl.submitAddProduct()" ng-class={marginTop:true}>
+
+            <p ng-class="{header:true, centered:true, marginTop:true}">Product details</p>
+
+            <input type="text" ng-model="ctrl.newProduct.name" placeholder="Product name" required ng-minlength="3" ng-maxlength="100" ng-class="{inputElem:true}" name="prodName" class="myInput">
+            <input type="number" ng-model="ctrl.newProduct.stock" placeholder="Stock" required min="1" max="10" ng-class="{inputElem:true}" name="prodStock" class="myInput">
+            <input type="number" step="0.01" ng-model="ctrl.newProduct.price" placeholder="Price" required min="1" ng-class="{inputElem:true}" name="prodPrice" class="myInput">
+            <input type="text" ng-model="ctrl.newProduct.category" placeholder="Category" required ng-class="{inputElem:true}" class="myInput" local-data="ctrl.categories">
+            <input type="number" ng-model="ctrl.newProduct.newNrOfDaysAvailable" placeholder="Number of available days" required min="1" ng-class="{inputElem:true}" class="myInput">
+
+            <div ng-class="{centered:true}">
+                <br>
+                <span ng-class="{error:true, bold:true}" ng-if="addProductForm.prodName.$error.maxlength">The name must not exceed 100 characters!!!</span>
+                <span ng-class="{error:true, bold:true}" ng-if="addProductForm.prodStock.$error.max">The number of products must not be grater than 10!!!</span>
+                <span ng-class="{error:true, bold:true}" ng-if="addProductForm.prodStock.$error.min">The number of products must be at least 1!!!</span>
+                <span ng-class="{error:true, bold:true}" ng-if="addProductForm.prodPrice.$error.min">The price of the product must be at least 1!!!</span>
+                <br>
+
+                <button type="submit" ng-disabled="addProductForm.$invalid" ng-class="{button:true}">Ok</button>
+                <button type="button" ng-click="ctrl.setAddProductFlag(0)" ng-class="{button:true}">Cancel</button>
+            </div>
+        </form>
+
+    </div>
+
+    <script src="angular.min.js"></script>
+
+    <script src="main.js"></script>
+    <script src="controller.js"></script>
+    <script src="i18n/angular-locale_en-us.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "category": "TV",
+    "price": 100,
+    "name": "Samsung 123",
+    "stock": 2,
+    "expDate": "2015-11-10",
+    "entryDate": "2015-08-13"
+  },
+  {
+    "guid": 2,
+    "category": "Phone",
+    "price":20,
+    "name": "Samsung Galaxy",
+    "stock": 20,
+    "expDate": "2015-12-12",
+    "entryDate": "2014-01-01" 
+  },
+    {
+    "id": 3,
+    "category": "Laptop",
+    "price": 99.99,
+    "name": "Samsung A2",
+    "stock": 4,
+    "expDate": "2015-11-10",
+    "entryDate": "2015-09-13"
+  },
+    {
+    "id": 4,
+    "category": "Laptop",
+    "price": 99.97,
+    "name": "Lenovo",
+    "stock": 15,
+    "expDate": "2015-12-10",
+    "entryDate": "2013-09-13"
+  },
+    {
+    "id": 5,
+    "category": "Laptop",
+    "price": 99.00,
+    "name": "Acer",
+    "stock": 1,
+    "expDate": "2015-12-10",
+    "entryDate": "2013-09-13"
+  }
+]

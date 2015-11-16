@@ -1,0 +1,26 @@
+[
+    {
+        "key":"name",
+        "value":"Name"
+    },
+    {
+        "key":"stock",
+        "value":"Stock"
+    },
+    {
+        "key":"price",
+        "value":"Price"
+    },
+    {
+        "key":"category",
+        "value":"Category"
+    },
+    {
+        "key":"entryDate",
+        "value":"Entry date"
+    },
+    {
+        "key":"expDate",
+        "value":"Expiration date"
+    }
+]
