@@ -2,7 +2,9 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="myCss.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    
+    <link rel="stylesheet" type="text/css" href="css/myCss.css">
 </head>
 
 
@@ -13,8 +15,8 @@
     <div ng-controller="ProductCtrl as ctrl" ng-class="{container:true}">
 
         <table ng-class="{table:true}">
-            <tr >
-                <td  ng-repeat="detail in ctrl.productDetails" class="tdata">
+            <tr>
+                <td  ng-repeat="detail in ctrl.productDetails" class="tdata first">
                    <span ng-click="ctrl.setOrderCriteria(detail.key)" ng-class="ctrl.getOrderClass(detail.key)">
                      {{detail.value}} </span>
                 </td>
@@ -48,7 +50,7 @@
                 <span ng-class="{error:true, bold:true}" ng-if="addProductForm.prodStock.$error.max">The number of products must not be grater than 10!!!</span>
                 <span ng-class="{error:true, bold:true}" ng-if="addProductForm.prodStock.$error.min">The number of products must be at least 1!!!</span>
                 <span ng-class="{error:true, bold:true}" ng-if="addProductForm.prodPrice.$error.min">The price of the product must be at least 1!!!</span>
-                <br>
+                <br> 
 
                 <button type="submit" ng-disabled="addProductForm.$invalid" ng-class="{button:true}">Ok</button>
                 <button type="button" ng-click="ctrl.setAddProductFlag(0)" ng-class="{button:true}">Cancel</button>
@@ -57,11 +59,11 @@
 
     </div>
 
-    <script src="angular.min.js"></script>
-
-    <script src="main.js"></script>
-    <script src="controller.js"></script>
-    <script src="i18n/angular-locale_en-us.js"></script>
+    <script src="scripts/angular.min.js"></script>
+    <script src="scripts/i18n/angular-locale_en-us.js"></script>
+    
+    <script src="src/main.js"></script>
+    <script src="src/controller.js"></script>
 
 </body>
 

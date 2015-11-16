@@ -1,0 +1,121 @@
+html{
+    -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.bold {
+    font-weight: : bold;
+    font-size: 20px;
+}
+
+.header {
+    font-size: 30px;
+}
+
+.centered {
+    /*width: 100%;*/
+    text-align: center;
+}
+
+.marginTop {
+    margin-top: 50px;
+}
+
+.button {
+    border-radius: 5px;
+    height: 30px;
+    font-size: 14px;
+    min-width: 100px;
+    background-color: lightblue;
+    border-color: white;
+}
+
+.button:hover {
+    border-radius: 5px;
+    height: 30px;
+    font-size: 14px;
+    min-width: 100px;
+    background-color: white;
+    border-color: lightblue;
+    cursor: pointer;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+}
+
+.inputElem {
+    display: block;
+    width: 40%;
+    height: 30px;
+    margin-left: 30%;
+    margin-top: 10px;
+}
+
+.table {
+    width: 100%;
+    font-size: 18px;
+    table-layout:fixed;
+}
+
+.lightBlue {
+    background-color: lightblue;
+}
+
+.lightGray {
+    background-color: lightgoldenrodyellow;
+}
+
+.lightBlue:hover,
+.lightGray:hover {
+    background-color: white;
+    cursor: default;
+}
+
+.trow {
+    height: 30px;
+}
+
+.tdata {
+    padding-left: 10px;
+}
+
+.tdata.first{
+    border-top: solid 1px lightblue;
+    cursor:pointer;
+}
+
+.desc:after {
+    content: '\1F53A';
+    font-size: 11px;
+    color: lightblue;
+}
+
+.asc:after {
+    content: '\1F53B';
+    font-size: 11px;
+    color: lightblue;
+}
+
+
+.error {
+    color: red;
+    display: block;
+}
+
+
+/*
+.myInput.ng-valid {
+    background-color: lightgreen;
+}
+
+.myInput.ng-dirty.ng-invalid-required{
+    background-color: red;
+}
+
+.myInput.ng-dirty.ng-invalid-minlength {
+    background-color: lightpink;
+}*/
