@@ -1,3 +1,10 @@
+html{
+    -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .bold {
     font-weight: : bold;
     font-size: 20px;
@@ -78,15 +85,21 @@
 
 .tdata.first{
     border-top: solid 1px lightblue;
+    cursor:pointer;
 }
 
 .desc:after {
     content: '\1F53A';
+    font-size: 11px;
+    color: lightblue;
 }
 
 .asc:after {
     content: '\1F53B';
+    font-size: 11px;
+    color: lightblue;
 }
+
 
 .error {
     color: red;
