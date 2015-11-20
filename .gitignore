@@ -82,6 +82,7 @@ Temporary Items
 *.sbr
 *.sdf
 ipch/
+packages/
 obj/
 [Bb]in
 [Dd]ebug*/

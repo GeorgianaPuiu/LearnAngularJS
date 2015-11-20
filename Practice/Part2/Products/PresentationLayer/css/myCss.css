@@ -1,0 +1,83 @@
+html {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.centered {
+    text-align: center;
+}
+
+.lightBlue {
+    background-color: lightblue;
+}
+
+.lightGray {
+    background-color: lightgoldenrodyellow;
+}
+
+.lightBlue:hover,
+.lightGray:hover {
+    background-color: white;
+    cursor: default;
+}
+
+.theader {
+    border-bottom: solid 1px lightblue;
+    cursor: pointer;
+    margin-left: 10px;
+    width:auto;
+}
+
+.desc:after {
+    content: '\1F53A';
+    font-size: 11px;
+    color: lightblue;
+}
+
+.asc:after {
+    content: '\1F53B';
+    font-size: 11px;
+    color: lightblue;
+}
+
+.error {
+    color: red;
+    display: block;
+}
+
+.marginUp {
+    margin-top: 50px;
+}
+
+.normalMarginUp {
+    margin-top: 20px;
+}
+
+.marginDown {
+    margin-bottom: 50px;
+}
+
+tr{
+    width:250px;
+}
+
+.myButtonWidth {
+    width: 80px;
+}
+
+.red {
+    color: #ff0000;
+    background: none;
+}
+
+.blue {
+    color: #0000A0;
+    background: none;
+}
+
+.black {
+    color: #000000;
+    background: none;
+}
