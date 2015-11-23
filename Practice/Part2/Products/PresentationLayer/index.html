@@ -1,0 +1,173 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" type="text/css" href="css/myCss.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+
+
+<body ng-app="app" style="width:100%">
+
+    <div class="centered marginUp">
+        <h1>Products list <small>part2</small></h1>
+    </div>
+
+    <div ng-controller="ProductCtrl as productCtrl" style="width:70%; margin:auto; margin-top:70px">
+
+        <div class="centered marginUp marginDown" ng-if="productCtrl.action.message">
+            <label ng-class="productCtrl.action.color">{{productCtrl.action.message}} </label>
+            <p style="margin-top:10px" ng-if="productCtrl.action.decide">
+                <button type="button" class="btn btn-primary btn-sm myButtonWidth" ng-click="productCtrl.deleteProduct(productCtrl.action.productID)">Yes</button>
+                <button type="button" class="btn btn-default btn-sm myButtonWidth" ng-click="productCtrl.action.message = '' ">No</button>
+            </p>
+        </div>
+
+        <div ng-if="productCtrl.products.length == 0" class="centered blue marginUp marginDown">
+            No products yet. You should add new ones.
+        </div>
+
+        <table class="table table-bordered">
+            <tr>
+                <td ng-repeat="detail in productCtrl.productDetails">
+                    <span ng-click="productCtrl.setOrderCriteria(detail.key)" ng-class="productCtrl.getOrderClass(detail.key)" class="theader">
+                            {{detail.value}} </span>
+                </td>
+                <td style="width:150px; text-align:center">
+                    <button type="button" class="btn btn-default myButtonWidth" ng-click="productCtrl.addProductFlag = !productCtrl.addProductFlag">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </button>
+                </td>
+            </tr>
+
+            <tr ng-repeat="product in productCtrl.products | orderBy : productCtrl.orderCriteria : productCtrl.orderAsc" ng-class="{lightBlue: $odd, lightGray:$even }">
+                <td>{{product.Name}}</td>
+                <td>{{product.Stock}}</td>
+                <td>{{product.Price | currency}}</td>
+                <td>{{product.Category.Name}}</td>
+                <td>{{product.EntryDate | date:'fullDate'}}</td>
+                <td>{{product.ExpirationDate | date :'fullDate'}}</td>
+                <td style="width:150px; background-color:white">
+
+                    <button type="button" class="btn btn-default" ng-click="productCtrl.openDetails(product.ID)">
+                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" ng-click="productCtrl.wantToEditProduct(product.ID)">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" ng-click="productCtrl.wantToDeleteProduct(product.ID)">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+        <div ng-if="productCtrl.addProductFlag || productCtrl.editProductFlag || productCtrl.readProductFlag" style="width:400px; margin:auto" class="marginUp">
+            <form name="productForm" ng-submit="productCtrl.submitProductForm()">
+                <label style="padding-left:20px; width:100%" class="normalMarginUp centered">Product details</label>
+
+                <div class="form-group" ng-class="[{'has-warning': productForm.pName.$dirty && productForm.pName.$invalid}, 
+                                                      {'has-success': productForm.pName.$dirty && productForm.pName.$valid}]">
+                    <label>Name</label>
+                    <input type="text" ng-model="productCtrl.newProduct.Name" name="pName" class="form-control" ng-minlength="3" ng-maxlength="30" required ng-disabled="productCtrl.readProductFlag">
+                </div>
+                <div class="centered red" ng-if="productForm.pName.$error && productForm.pName.$touched && !productCtrl.readProductFlag">
+                    <p ng-if="productForm.pName.$error.minlength">The name is too short.</p>
+                    <p ng-if="productForm.pName.$error.maxlength">The name is too long.</p>
+                    <p ng-if="productForm.pName.$error.required">The name is required.</p>
+                </div>
+
+                <div class="form-group" ng-class="[{'has-warning': productForm.pStock.$dirty && productForm.pStock.$invalid}, 
+                                                      {'has-success': productForm.pStock.$dirty && productForm.pStock.$valid}]">
+                    <label>Stock</label>
+                    <input type="number" ng-model="productCtrl.newProduct.Stock" name="pStock" class="form-control" required ng-min="1" ng-max="50" ng-disabled="productCtrl.readProductFlag">
+                </div>
+                <div class="centered red" ng-if="productForm.pStock.$error && productForm.pStock.$touched && !productCtrl.readProductFlag">
+                    <p ng-if="productForm.pStock.$error.min">The stock must be at least 1.</p>
+                    <p ng-if="productForm.pStock.$error.max">The stock must be less than 50.</p>
+                    <p ng-if="productForm.pStock.$error.required">The stock is required.</p>
+                </div>
+
+                <div class="form-group" ng-class="[ {'has-warning': productForm.pPrice.$dirty && productForm.pPrice.$invalid}, 
+                                                      {'has-success': productForm.pPrice.$dirty && productForm.pPrice.$valid}]">
+                    <label>Price</label>
+                    <input type="number" step="0.01" ng-model="productCtrl.newProduct.Price" name="pPrice" class="form-control" required ng-min="0.01" ng-disabled="productCtrl.readProductFlag">
+                </div>
+                <div class="centered red" ng-if="productForm.pPrice.$error && productForm.pPrice.$touched && !productCtrl.readProductFlag">
+                    <p ng-if="productForm.pPrice.$error.min">The price must be at least {{0.01|currency}}.</p>
+                    <p ng-if="productForm.pPrice.$error.required">The price is required.</p>
+                </div>
+
+                <div ng-if="productCtrl.readProductFlag">
+                    <div class="form-group">
+                        <label>Entry date</label>
+                        <input type="text" ng-model="productCtrl.newProduct.EntryDate | date: 'yyyy-MM-dd'" class="form-control" ng-disabled="true">
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="[{'has-warning': productForm.pExpDate.$dirty && productForm.pExpDate.$invalid}, 
+                                                      {'has-success': productForm.pExpDate.$dirty && productForm.pExpDate.$valid}]">
+                    <label>Expiration date</label>
+                    <input type="date" ng-model="productCtrl.newProduct.ExpirationDate" class="form-control" name="pExpDate" min="{{productCtrl.today | date: 'yyyy-MM-dd'}}" required ng-if="productCtrl.editProductFlag || productCtrl.addProductFlag">
+
+                    <input type="text" ng-model="productCtrl.newProduct.ExpirationDate | date: 'yyyy-MM-dd'" class="form-control" ng-if="productCtrl.readProductFlag" ng-disabled="true">
+                </div>
+                <div class="centered red" ng-if="productForm.pExpDate.$error && productForm.pExpDate.$touched && !productCtrl.readProductFlag">
+                    <p ng-if="productForm.pExpDate.$error.required">The expiration date is required.</p>
+                </div>
+
+
+                <div class="form-group" ng-class="[{'has-warning': productForm.pDescription.$dirty && productForm.pDescription.$invalid}, 
+                                                      {'has-success': productForm.pDescription.$dirty && productForm.pDescription.$valid}]">
+                    <label>Description</label>
+                    <textarea ng-model="productCtrl.newProduct.Description" class="form-control" name="pDescription" ng-disabled="productCtrl.readProductFlag"></textarea>
+                </div>
+
+
+                <div ng-controller="CategoryCtrl as categoryCtrl" ng-if="productCtrl.addProductFlag || productCtrl.readProductFlag">
+                    <label for="category" style="padding-left:10px; width:100%">Category
+                        <div ng-if="productCtrl.addProductFlag">
+                            <button style="float:right" title="Add new category" ng-if="categoryCtrl.addCategoryFlag" ng-click="categoryCtrl.addCategoryFlag = !categoryCtrl.addCategoryFlag">
+                                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                            </button>
+                            <button style="float:right" title="Close" ng-if="!categoryCtrl.addCategoryFlag" ng-click="categoryCtrl.addCategoryFlag = !categoryCtrl.addCategoryFlag">
+                                <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </label>
+
+                    <div ng-if="!categoryCtrl.addCategoryFlag" ng-include="'templates/categoryForm.html'"></div>
+
+                    <div class="form-group" ng-class="[{'has-warning': productForm.pCategory.$dirty && productForm.pCategory.$invalid}, 
+                                                          {'has-success': productForm.pCategory.$dirty && productForm.pCategory.$valid}]">
+
+                        <select name="pCategory" id="categorySelect" ng-model="productCtrl.newProduct.CategoryID" size="3" class="form-control" required ng-if="!productCtrl.readProductFlag">
+                            <option ng-repeat="categ in categoryCtrl.categories" value="{{categ.ID}}">{{categ.Name}}</option>
+                        </select>
+                        <input type="text" ng-model="productCtrl.newProduct.Category.Name" class="form-control" ng-disabled="true" ng-if="productCtrl.readProductFlag">
+                    </div>
+
+                    <div class="centered red" ng-if="productForm.pCategory.$error && productForm.pCategory.$touched && !productCtrl.readProductFlag">
+                        <p ng-if="productForm.pCategory.$error.required">You must select a category.</p>
+                    </div>
+                </div>
+
+                <div class="centered normalMarginUp">
+                    <button type="submit" ng-disabled="productForm.$invalid" class="btn btn-primary myButtonWidth">Ok</button>
+                    <button type="button" class="btn btn-default myButtonWidth" ng-click="productCtrl.setAllFlags(false);productCtrl.newProduct = null; productCtrl.initAction()" ng-if="!productCtrl.readProductFlag">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/angular.min.js"></script>
+    <script src="scripts/i18n/angular-locale_en-us.js"></script>
+
+    <script src="src/main.js"></script>
+    <script src="src/productController.js"></script>
+    <script src="src/categoryController.js"></script>
+</body>
+
+</html>
