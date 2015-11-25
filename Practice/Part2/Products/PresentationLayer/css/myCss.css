@@ -9,25 +9,30 @@ html {
     text-align: center;
 }
 
-.lightBlue {
+.product-container {
+    width: 70%;
+    margin: auto;
+}
+
+.light-blue {
     background-color: lightblue;
 }
 
-.lightGray {
+.light-gray {
     background-color: lightgoldenrodyellow;
 }
 
-.lightBlue:hover,
-.lightGray:hover {
+.light-blue:hover,
+.light-gray:hover {
     background-color: white;
     cursor: default;
 }
 
-.theader {
+.table-header {
     border-bottom: solid 1px lightblue;
     cursor: pointer;
     margin-left: 10px;
-    width:auto;
+    width: auto;
 }
 
 .desc:after {
@@ -42,42 +47,78 @@ html {
     color: lightblue;
 }
 
-.error {
-    color: red;
-    display: block;
-}
-
-.marginUp {
+.margin-top-50 {
     margin-top: 50px;
 }
 
-.normalMarginUp {
+.normal-top-20 {
     margin-top: 20px;
 }
 
-.marginDown {
+.margin-bottom-50 {
     margin-bottom: 50px;
 }
 
-tr{
-    width:250px;
+.margin-bottom-20 {
+    margin-bottom: 20px;
 }
 
-.myButtonWidth {
+.td-for-buttons {
+    width: 150px;
+    background-color: white;
+}
+
+.button-width {
     width: 80px;
 }
 
-.red {
+.red-color {
     color: #ff0000;
     background: none;
 }
 
-.blue {
+.blue-color {
     color: #0000A0;
     background: none;
 }
 
-.black {
+.black-color {
     color: #000000;
     background: none;
+}
+
+.product-form-container {
+    width: 400px;
+    margin: auto;
+}
+
+.padding-left-20 {
+    padding-left: 20px;
+    width: 100%;
+}
+
+.ng-valid.ng-dirty,
+.ng-valid-maxlength.ng-dirty,
+.ng-valid-minlength.ng-dirty {
+    border-color: green;
+    border-width: 2px;
+}
+
+.ng-invalid.ng-dirty,
+.ng-touched.ng-pristine.ng-invalid-required {
+    border-color: red;
+    border-width: 2px;
+}
+
+.float-right {
+    float: right:
+}
+
+.margin-0 {
+    margin: 0;
+}
+
+.position-relative {
+    position: relative;
+    float: right;
 }

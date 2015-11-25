@@ -3,11 +3,11 @@ app.controller('ProductCtrl', function ($http, $timeout, $log, $filter) {
     var apiServiceUrl = apiBaseUrl + 'api/products';
 
     self.orderAsc = true;
-    self.addProductFlag = false;
-    self.editProductFlag = false;
-    self.readProductFlag = false;
+    self.isProductFormVisible = false;
+    self.isProductFormReadonly = false;
+    self.isFormDataForAddProduct = true;
+    self.isExpirationDateTooEarly = false;
     self.today = new Date();
-
 
     //get the header
     $http.get('http://localhost:8082/data/ProductDetails.json').success(function (data) {
@@ -15,18 +15,23 @@ app.controller('ProductCtrl', function ($http, $timeout, $log, $filter) {
         self.orderCriteria = self.productDetails[0].key;
     });
 
-
     self.loadProducts = function () {
         $http.get(apiServiceUrl)
-            .success(function (data) {            
+            .success(function (data) {
             self.products = data;
-            self.initAction();
         })
             .error(function (data, status, header, config) {
-            self.action.message = "Please reload the page. An error occured when trying to fetch data. " + status;
-            self.action.color = "blue";
+            // self.action.message = "Please reload the page. An error occured when trying to fetch data. " + status;
+            // self.action.color = "blue";
         });
-    };    
+    };
+
+    self.loadProduct = function (id) {
+        var url = apiServiceUrl + '/' + id;
+        return $http.get(url).then(function (response) {
+            return response.data;
+        });
+    };
 
     self.setOrderCriteria = function (newCriteria) {
         if (newCriteria === self.orderCriteria) {
@@ -47,57 +52,44 @@ app.controller('ProductCtrl', function ($http, $timeout, $log, $filter) {
         return "";
     };
 
-    //functions
-    function createProduct(data, config){        
+    self.resetProductForm = function () {
+        self.newProduct = null;
+        self.isProductFormVisible = false;
+        self.isProductFormReadonly = false;
+        self.isFormDataForAddProduct = true;
+        self.isExpirationDateTooEarly = false;
+    };
+
+    function createProduct(data) {
+        var config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
         $http.post(apiServiceUrl, data, config)
             .success(function (data, status, headers, config) {
             self.loadProducts();
         })
             .error(function (data, status, header, config) {
-            self.action.message = "The product was not added!" + status;
-            self.action.color = "red";
+            //self.action.message = "The product was not added!" + status;
+            // self.action.color = "red";
         });
     };
 
-    function updateProduct(data, config){        
-        $http.put(apiServiceUrl+'/update', data, config)
+    function updateProduct(data) {
+        var config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        $http.put(apiServiceUrl + '/update', data, config)
             .success(function (data, status, headers, config) {
             self.loadProducts();
         })
             .error(function (data, status, header, config) {
-            self.action.message = "The product was not updated!" + status;
-            self.action.color = "red";
+            //  self.action.message = "The product was not updated!" + status;
+            //  self.action.color = "red";
         });
-    };
-
-
-
-    self.submitProductForm = function () {       
-        if(self.readProductFlag === false){        
-            self.newProduct.ExpirationDate = new Date(self.newProduct.ExpirationDate);   
-
-            if(self.addProductFlag === true){
-                self.newProduct.EntryDate = self.today;            
-            }
-
-            var data = self.newProduct;  
-            var config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-
-            if(self.addProductFlag === true){
-                createProduct(data, config);
-            }
-
-            if(self.editProductFlag === true){
-                updateProduct(data, config);
-            }
-        }
-
-        self.newProduct = null;
-        self.setAllFlags(false);
     };
 
     self.deleteProduct = function (id) {
@@ -105,52 +97,53 @@ app.controller('ProductCtrl', function ($http, $timeout, $log, $filter) {
             .success(function (data, status, headers) {
             self.loadProducts();
         })
-            .error(function (data, status, header, config) {
-            self.action.message = "The product was not deleted!" + status;
-            self.action.color = "red";
+            .error(function (data, status, header, config) {});
+    };
+
+    self.submitProductForm = function (isProductFormValid) {
+        if (isProductFormValid) {
+            if (!self.isProductFormReadonly) {
+
+                var data = self.newProduct;
+                if (data.ExpirationDate >= self.today) {
+
+                    if (self.isFormDataForAddProduct) {
+                        data.EntryDate = self.today;
+                        createProduct(data);
+                    } else {
+                        updateProduct(data);
+                    }
+                    self.resetProductForm();
+                } else {
+                    self.isExpirationDateTooEarly = true;
+                }
+            } else {
+                self.resetProductForm();
+            }
+        }
+    };
+
+    self.readProduct = function (id) { //get from id
+        var productFromDB = self.loadProduct(id);
+        productFromDB.then(function (result) {
+            self.newProduct = angular.copy(result);
+            // self.newProduct.ExpirationDate = new Date(self.newProduct.ExpirationDate);
+            self.isProductFormReadonly = true;
+            self.isProductFormVisible = true;
         });
     };
 
-    self.wantToDeleteProduct = function (id) {
-        self.action.message = "Are you sure you want to delete the product?";
-        self.action.productID = id;
-        self.action.decide = true;
-        self.action.color = 'blue';
-    }
-
-    self.openDetails = function (id) {
-        self.newProduct = $filter('filter')(self.products, {
-            ID: id
-        })[0];
-        self.readProductFlag = true;
+    self.editProduct = function (id) {
+        var productFromDB = self.loadProduct(id);
+        productFromDB.then(function (result) {
+            self.newProduct = angular.copy(result);
+            self.newProduct.ExpirationDate = new Date(self.newProduct.ExpirationDate);
+            self.newProduct.EntryDate = new Date(self.newProduct.EntryDate);
+            self.isFormDataForAddProduct = false;
+            self.isProductFormReadonly = false;
+            self.isProductFormVisible = true;
+        });
     };
-
-    self.wantToEditProduct = function (id) {
-        var prod = $filter('filter')(self.products, {
-            ID: id
-        })[0];
-        self.newProduct = angular.copy(prod);
-        self.newProduct.ExpirationDate = new Date(self.newProduct.ExpirationDate);
-        self.editProductFlag = true;
-    };
-
-    self.initAction = function () {
-        self.action = {
-            message: '',
-            color: 'black',
-            productID: -1,
-            decide: false
-        };
-    };
-
-
-    self.setAllFlags = function (val) {
-        self.addProductFlag = val;
-        self.editProductFlag = val;
-        self.readProductFlag = val;
-    };
-
-    self.initAction();
 
     self.loadProducts();
 });

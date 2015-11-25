@@ -7,27 +7,23 @@ app.controller('CategoryCtrl', function ($http, $timeout, $log) {
         }
     };
 
-    self.addCategoryFlag = true;
+    self.isCategoryFormVisible = false;
 
     self.loadCategories = function () {
         $http.get(apiServiceUrl)
             .success(function (data) {
-            self.categories = data;
-        });
+                self.categories = data;
+            });
     };
 
-    self.submitForm = function(){
+    self.submitCategoryForm = function () {
 
-        data = self.newCategory;        
+        data = self.newCategory;
         $http.post(apiServiceUrl, data, config)
             .success(function (data, status, headers, config) {
-            self.loadCategories();
-        })
-            .error(function (data, status, header, config) {
-            self.action.message = "The category was not added!" + status;
-            self.action.color = "red";
-        });
-        self.addCategoryFlag = true;
+                self.loadCategories();
+            });
+        self.isCategoryFormVisible = false;
     }
 
     self.loadCategories();
