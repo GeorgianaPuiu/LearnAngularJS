@@ -96,38 +96,32 @@ app.controller('ProductCtrl', function ($http, $timeout, $log, $filter) {
         $http.delete(apiServiceUrl + '/' + id)
             .success(function (data, status, headers) {
             self.loadProducts();
-        })
-            .error(function (data, status, header, config) {});
+        });           
     };
 
-    self.submitProductForm = function (isProductFormValid) {
-        if (isProductFormValid) {
-            if (!self.isProductFormReadonly) {
+    self.submitProductForm = function () {
+        var data = self.newProduct;
+        if (self.isFormDataForAddProduct) {
+            data.EntryDate = self.today;
+            createProduct(data);
+        } else {
+            updateProduct(data);
+        }
+        self.resetProductForm();
+    };
 
-                var data = self.newProduct;
-                if (data.ExpirationDate >= self.today) {
-
-                    if (self.isFormDataForAddProduct) {
-                        data.EntryDate = self.today;
-                        createProduct(data);
-                    } else {
-                        updateProduct(data);
-                    }
-                    self.resetProductForm();
-                } else {
-                    self.isExpirationDateTooEarly = true;
-                }
-            } else {
-                self.resetProductForm();
-            }
+    self.checkExpirationDate = function () {
+        var expDate = self.newProduct.ExpirationDate;    
+        if (expDate < self.today) {
+            self.isExpirationDateTooEarly = true;
+        }else{
+            self.isExpirationDateTooEarly = false;
         }
     };
-
-    self.readProduct = function (id) { //get from id
+    self.readProduct = function (id) {
         var productFromDB = self.loadProduct(id);
         productFromDB.then(function (result) {
-            self.newProduct = angular.copy(result);
-            // self.newProduct.ExpirationDate = new Date(self.newProduct.ExpirationDate);
+            self.newProduct = result;
             self.isProductFormReadonly = true;
             self.isProductFormVisible = true;
         });
@@ -136,7 +130,7 @@ app.controller('ProductCtrl', function ($http, $timeout, $log, $filter) {
     self.editProduct = function (id) {
         var productFromDB = self.loadProduct(id);
         productFromDB.then(function (result) {
-            self.newProduct = angular.copy(result);
+            self.newProduct = result;
             self.newProduct.ExpirationDate = new Date(self.newProduct.ExpirationDate);
             self.newProduct.EntryDate = new Date(self.newProduct.EntryDate);
             self.isFormDataForAddProduct = false;

@@ -58,7 +58,7 @@
         </table>
 
         <div ng-if="productCtrl.isProductFormVisible" class="margin-top-50 product-form-container">
-            <form name="productForm" ng-submit="productCtrl.submitProductForm(productForm.$valid)">
+            <form name="productForm" ng-submit="productCtrl.submitProductForm()">
                 <label class="margin-top-50 centered padding-left-20">Product details</label>
 
                 <div class="form-group">
@@ -99,13 +99,15 @@
 
                 <div class="form-group">
                     <label>Expiration date</label>
-                    <input type="date" ng-model="productCtrl.newProduct.ExpirationDate" class="form-control" name="pExpDate" required ng-if="!productCtrl.isProductFormReadonly">
+                    <input type="date" ng-model="productCtrl.newProduct.ExpirationDate" class="form-control" 
+                           name="pExpDate" required ng-if="!productCtrl.isProductFormReadonly"
+                           ng-blur="productCtrl.checkExpirationDate()" >
 
                     <input type="text" value="{{productCtrl.newProduct.ExpirationDate | date: 'yyyy-MM-dd'}}" class="form-control" ng-if="productCtrl.isProductFormReadonly" ng-readonly="productCtrl.isProductFormReadonly">
                 </div>
-                <div class="centered red-color" ng-if="productForm.pPrice.$touched">
+                <div class="centered red-color" ng-if="productForm.pExpDate.$touched">
                     <p ng-if="productForm.pExpDate.$error.required">The expiration date is required.</p>
-                    <p ng-if="productCtrl.isExpirationDateTooEarly">The expiration date must be grater than {{productCtrl.today| date: 'yyyy-MM-dd'}}.</p>
+                    <p ng-if="productCtrl.isExpirationDateTooEarly">The expiration date must be grather than {{productCtrl.today| date: 'yyyy-MM-dd'}}.</p>
                 </div>
 
 
@@ -142,7 +144,7 @@
                 </div>
 
                 <div class="centered margin-top-20">
-                    <button type="submit" class="btn btn-primary button-width">Ok</button>
+                    <button type="submit" class="btn btn-primary button-width" ng-if="!productCtrl.isProductFormReadonly">Ok</button>
                     <button type="button" class="btn btn-default button-width" ng-click="productCtrl.resetProductForm()">Cancel</button>
                 </div>
             </form>
@@ -150,11 +152,14 @@
     </div>
 
     <script src="scripts/angular.min.js"></script>
+    <script src="scripts/angular-resource.min.js"></script>
     <script src="scripts/i18n/angular-locale_en-us.js"></script>
 
     <script src="src/main.js"></script>
-    <script src="src/productController.js"></script>
-    <script src="src/categoryController.js"></script>
+    <script src="src/services/productService.js"></script>    
+    <script src="src/controllers/productController.js"></script>
+    <script src="src/services/categoryService.js"></script>
+    <script src="src/controllers/categoryController.js"></script>
 </body>
 
 </html>
