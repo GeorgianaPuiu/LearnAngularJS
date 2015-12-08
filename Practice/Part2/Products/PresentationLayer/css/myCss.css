@@ -4,6 +4,9 @@ html {
     -ms-user-select: none;
     user-select: none;
 }
+.width-full{
+    width:100%;
+}
 
 .centered {
     text-align: center;
@@ -121,4 +124,19 @@ html {
 .position-relative {
     position: relative;
     float: right;
+}
+.spinner-sizes{
+    width: 100px;
+    height: 100px;
+}
+.padding-top-70
+{
+    padding-top: 70px;
+}
+.padding-left-100 {
+    padding-left: 100px;
+}
+.image-size-200-200{
+    height: 200px;
+    width: 200px;
 }

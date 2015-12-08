@@ -1,4 +1,10 @@
-app.factory('CategoryService', ['$resource', function ($resource) {
-    var apiServiceUrl = apiBaseUrl + 'api/categories';  
-    return $resource(apiServiceUrl, null);
-}]);
+(function () {
+    'use strict';
+    angular.module('app')
+        .factory('CategoryService', ['$resource', 'apiUrlBase', CategoryService]);
+
+    function CategoryService($resource, apiUrlBase) {
+        var apiServiceUrl = apiUrlBase + 'api/categories';
+        return $resource(apiServiceUrl, null);
+    }
+})();

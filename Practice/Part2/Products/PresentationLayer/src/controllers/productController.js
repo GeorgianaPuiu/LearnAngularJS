@@ -1,106 +1,134 @@
-app.controller('ProductCtrl', function ($log, $filter, ProductService) {
-    var self = this;
+(function () {
+    'use strict';
+    angular.module('app')
+        .controller('ProductCtrl', ['$log', '$filter', 'ProductService', '$location', ProductCtrl]);
 
-    self.orderAsc = true;
-    self.isProductFormVisible = false;
-    self.isProductFormReadonly = false;
-    self.isFormDataForAddProduct = true;
-    self.isExpirationDateTooEarly = false;
-    self.today = new Date();
+    function ProductCtrl($log, $filter, ProductService, $location) {
+        var self = this;
 
-    function refreshProductsList() {
-        ProductService.getAllProducts().then(function (result) {
-            self.products = result.data;
-        });
-
-    };
-
-    function initProductTable() {
-        ProductService.getProductDetails().then(function (result) {
-            self.productDetails = result;
-            self.orderCriteria = self.productDetails[0].key;
-        });
-        refreshProductsList();
-    };
-
-    initProductTable();
-
-    self.setOrderCriteria = function (newCriteria) {
-        if (newCriteria === self.orderCriteria) {
-            self.orderAsc = !self.orderAsc;
-        } else {
-            self.orderCriteria = newCriteria;
-            self.orderAsc = true;
-        }
-    };
-
-    self.getOrderClass = function (criteria) {
-        if (self.orderCriteria === criteria) {
-            if (self.orderAsc === true) {
-                return "asc";
-            }
-            return "desc";
-        }
-        return "";
-    };
-
-    self.resetProductForm = function () {
-        self.newProduct = null;
+        self.today = new Date();
+        self.orderAsc = true;
         self.isProductFormVisible = false;
         self.isProductFormReadonly = false;
         self.isFormDataForAddProduct = true;
-        self.isExpirationDateTooEarly = false;
-    };
+        self.isExpirationDateTooEarly = false;  
 
-    self.submitProductForm = function () {
-        var data = self.newProduct;
-        var promise;
-        if (self.isFormDataForAddProduct) {
-            data.EntryDate = self.today;
-            promise = ProductService.addProduct(data);
-        } else {
-            promise = ProductService.updateProduct(data);
+        //Spinner
+        self.isSpinnerVisible = true;
+
+        //Product Form
+        self.setOrderCriteria = setOrderCriteria;
+        self.getOrderClass = getOrderClass;
+        self.resetProductForm = resetProductForm;
+        self.submitProductForm = submitProductForm;
+        self.checkExpirationDate = checkExpirationDate;
+
+
+        //Product CRUD Operations
+        //create is in submitProductForm
+        self.readProduct = readProduct;
+        self.editProduct = editProduct;
+        self.deleteProduct = deleteProduct;
+
+        function refreshProductsList() {
+            ProductService.getAllProducts()
+                .then(function (result) {
+                self.isSpinnerVisible = false;
+                self.products = result.data;
+            });
         }
-        promise.then(function(result){
-            refreshProductsList();
-        });      
-        self.resetProductForm();
-    };
 
-    self.checkExpirationDate = function () {
-        var expDate = self.newProduct.ExpirationDate;
-        if (expDate < self.today) {
-            self.isExpirationDateTooEarly = true;
-        } else {
+        function initProductTable() {
+            ProductService.getProductTableHeader()
+                .then(function (result) {
+                self.productTableHeaderItems = result;
+                self.orderCriteria = self.productTableHeaderItems[0].key;
+            });
+            refreshProductsList();
+        }
+
+        function setOrderCriteria(newCriteria) {
+            if (newCriteria === self.orderCriteria) {
+                self.orderAsc = !self.orderAsc;
+            } else {
+                self.orderCriteria = newCriteria;
+                self.orderAsc = true;
+            }
+        }
+
+        function getOrderClass(criteria) {
+            if (self.orderCriteria === criteria) {
+                if (self.orderAsc === true) {
+                    return "asc";
+                }
+                return "desc";
+            }
+            return "";
+        }
+
+        function resetProductForm() {
+            self.newProduct = null;
+            self.isProductFormVisible = false;
+            self.isProductFormReadonly = false;
+            self.isFormDataForAddProduct = true;
             self.isExpirationDateTooEarly = false;
         }
-    };
 
-    self.readProduct = function (id) {
-        ProductService.getProductById(id).then(function (result) {
-            self.newProduct = result.data;
-            self.isProductFormReadonly = true;
-            self.isProductFormVisible = true;
-        });
-    };
+        function submitProductForm() {
+            var data, promise;
+            data = self.newProduct;
+            if (self.isFormDataForAddProduct) {
+                data.EntryDate = self.today;
+                promise = ProductService.addProduct(data);
+            } else {
+                promise = ProductService.updateProduct(data);
+            }
+            self.isSpinnerVisible = true;
+            promise.then(function (result) {
+                refreshProductsList();
+            });
+            self.resetProductForm();
+        }
 
-    self.editProduct = function (id) {
-        ProductService.getProductById(id).then(function (result) {
-            self.newProduct = result.data;
-            self.newProduct.ExpirationDate = new Date(self.newProduct.ExpirationDate);
-            self.newProduct.EntryDate = new Date(self.newProduct.EntryDate);
+        function checkExpirationDate() {
+            var expDate = self.newProduct.ExpirationDate;
+            if (expDate < self.today) {
+                self.isExpirationDateTooEarly = true;
+            } else {
+                self.isExpirationDateTooEarly = false;
+            }
+        }
 
-            self.isFormDataForAddProduct = false;
-            self.isProductFormReadonly = false;
-            self.isProductFormVisible = true;
-        });
-    };
+        function readProduct(id) {
+            ProductService.getProductById(id)
+                .then(function (result) {
+                self.newProduct = result.data;
+                self.isProductFormReadonly = true;
+                self.isProductFormVisible = true;
+            });
+        }
 
-    self.deleteProduct = function (id) {
-        ProductService.deleteProductById(id).then(function (result) {
-            $log.info("deleted " + result.data);
-            refreshProductsList();
-        });
+        function editProduct(id) {
+            ProductService.getProductById(id).then(function (result) {
+                self.newProduct = result.data;
+                self.newProduct.ExpirationDate = new Date(self.newProduct.ExpirationDate);
+                self.newProduct.EntryDate = new Date(self.newProduct.EntryDate);
 
-    };
-});
+                self.isFormDataForAddProduct = false;
+                self.isProductFormReadonly = false;
+                self.isProductFormVisible = true;
+            });
+        }
+
+        function deleteProduct(id) {
+            self.isSpinnerVisible = true;
+            ProductService.deleteProductById(id)
+                .then(function (result) {
+                $log.info("deleted " + result.data);
+                refreshProductsList();
+            });
+        }        
+
+        initProductTable();
+    }
+})();

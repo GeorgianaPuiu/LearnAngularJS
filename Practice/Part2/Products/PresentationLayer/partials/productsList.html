@@ -1,0 +1,165 @@
+<div ng-controller="ProductCtrl as productCtrl" class="product-container margin-top-50">
+
+    <div ng-if="productCtrl.products.length == 0" class="centered blue margin-top-50 margin-bottom-50">
+        No products yet. You should add new ones.
+    </div>
+
+    <!--Search in products-->
+    <div class="position-relative margin-bottom-20">
+        <input ng-model="search_word" class="form-control" placeholder='Search in products ...' />
+    </div>
+
+    <table class="table table-bordered">
+        <tr>
+            <td ng-repeat="item in productCtrl.productTableHeaderItems">
+                <span ng-click="productCtrl.setOrderCriteria(item.key)" ng-class="productCtrl.getOrderClass(item.key)" class="theader">
+                    {{item.value}}
+                </span>
+            </td>
+            <td class="td-for-buttons centered">
+                <button type="button" class="btn btn-default button-width" ng-click="productCtrl.isProductFormVisible = true">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            </td>
+        </tr>
+
+
+        <tr ng-repeat="product in productCtrl.products | orderBy : productCtrl.orderCriteria : productCtrl.orderAsc | filter : search_word" 
+            ng-class="[{'light-blue': $odd}, {'light-gray':$even }]">
+            <td>{{product.Name}}</td>
+            <td>{{product.Stock}}</td>
+            <td>{{product.Price | currency}}</td>
+            <td>{{product.Category.Name}}</td>
+            <td>{{product.EntryDate | date:'fullDate'}}</td>
+            <td>{{product.ExpirationDate | date :'fullDate'}}</td>
+            <td class="td-for-buttons">
+                <button type="button" class="btn btn-default" ng-click="productCtrl.readProduct(product.ID)">
+                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                </button>
+
+                <button type="button" class="btn btn-default" ng-click="productCtrl.editProduct(product.ID)">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                </button>
+
+                <button type="button" class="btn btn-default" ng-click="productCtrl.deleteProduct(product.ID)">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button>
+                <!-- 
+                    <span  ng-click='productCtrl.openModalWithProductDetails(product.ID)'>modal</span> 
+                -->
+            </td>
+        </tr>
+    </table>
+
+    <!--Spinner -->
+    <div ng-if="productCtrl.isSpinnerVisible" class="width-full centered">               
+        <img src="images/spinner.gif" alt="Loading, please wait!" class="spinner-sizes">              
+    </div>
+
+    <div ng-if="productCtrl.isProductFormVisible" class="margin-top-50 product-form-container">
+
+        <form name="productForm" ng-submit="productCtrl.submitProductForm()">
+            <label class="margin-top-50 centered padding-left-20">Product details</label>
+            <!--Product name field-->
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" ng-model="productCtrl.newProduct.Name" name="pName" class="form-control" ng-minlength="3" ng-maxlength="30" required 
+                       ng-readonly="productCtrl.isProductFormReadonly">
+            </div>                
+            <div class="centered red-color" ng-messages='productForm.pName.$error' ng-if="productForm.pName.$touched">
+                <div ng-messages-include="templates/messages.html"></div>
+            </div>
+
+            <!--Product stock field-->
+            <div class="form-group">
+                <label>Stock</label>
+                <input type="number" ng-model="productCtrl.newProduct.Stock" name="pStock" class="form-control" step="1" required ng-min="1" ng-max="50" 
+                       ng-readonly="productCtrl.isProductFormReadonly">
+            </div>
+            <div class="centered red-color" ng-messages='productForm.pStock.$error' ng-if="productForm.pStock.$touched">
+                <p ng-message="min">The stock must be at least 1.</p>
+                <p ng-message="max">The stock must be smaller than 50.</p>
+                <div ng-messages-include="templates/messages.html"></div>
+            </div>
+
+            <!--Product price field-->
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" step="0.01" ng-model="productCtrl.newProduct.Price" name="pPrice" class="form-control" required ng-min="0.01" 
+                       ng-readonly="productCtrl.isProductFormReadonly">
+            </div>                
+            <div class="centered red-color" ng-messages='productForm.pPrice.$error' ng-if="productForm.pPrice.$touched">
+                <p ng-message="min">The price must be at least {{0.01|currency}}.</p>
+                <div ng-messages-include="templates/messages.html"></div>
+            </div>
+
+            <!--Product entry date field-->
+            <div ng-if="productCtrl.isProductFormReadonly">
+                <div class="form-group">
+                    <label>Entry date</label>
+                    <input type="text" value="{{productCtrl.newProduct.EntryDate | date: 'yyyy-MM-dd'}}" class="form-control" 
+                           ng-readonly="productCtrl.isProductFormReadonly">
+                </div>
+            </div>
+
+            <!--Product expiration date field-->
+            <div class="form-group">
+                <label>Expiration date</label>
+                <input type="date" ng-model="productCtrl.newProduct.ExpirationDate" class="form-control"
+                       name="pExpDate" required ng-if="!productCtrl.isProductFormReadonly"
+                       ng-blur="productCtrl.checkExpirationDate()" placeholder="yyyy-mm-dd">
+
+                <input type="text" value="{{productCtrl.newProduct.ExpirationDate | date: 'yyyy-MM-dd'}}" class="form-control" 
+                       ng-if="productCtrl.isProductFormReadonly" ng-readonly="productCtrl.isProductFormReadonly">
+            </div>
+            <div class="centered red-color" ng-messages='productForm.pExpDate.$error' ng-if="productForm.pExpDate.$touched">
+                <p ng-if="productCtrl.isExpirationDateTooEarly">The expiration date must be grather than {{productCtrl.today| date: 'yyyy-MM-dd'}}.</p>
+                <div ng-messages-include="templates/messages.html"></div>
+            </div>
+
+            <!--Product description field -->
+            <div class="form-group">
+                <label>Description</label>
+                <textarea ng-model="productCtrl.newProduct.Description" class="form-control" name="pDescription" 
+                          ng-readonly="productCtrl.isProductFormReadonly"></textarea>
+            </div>
+
+            <!--Product category field-->
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" value="{{productCtrl.newProduct.Category.Name}}" class="form-control" ng-if="productCtrl.isProductFormReadonly" 
+                       ng-readonly="productCtrl.isProductFormReadonly">
+
+                <div ng-controller="CategoryCtrl as categoryCtrl" ng-if="!productCtrl.isProductFormReadonly">
+                    <span>
+                        <button title="Add new category" ng-if="!categoryCtrl.isCategoryFormVisible" ng-click="categoryCtrl.isCategoryFormVisible = true"
+                                class="btn btn-default btn-sm position-relative">
+                            New category
+                        </button>
+                        <button title="Close" ng-if="categoryCtrl.isCategoryFormVisible" ng-click="categoryCtrl.isCategoryFormVisible = false" class="position-relative">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                    </span>
+
+                    <!--Cagerogy form -->
+                    <div ng-if="categoryCtrl.isCategoryFormVisible" ng-include="'templates/categoryForm.html'"></div>
+
+                    <div class="form-group">
+                        <select ng-model="productCtrl.newProduct.CategoryID" ng-options="category.ID as category.Name for category in categoryCtrl.categories"
+                                name="pCategory" class="form-control">
+                            <option value="">-- Choose category --</option>
+                        </select>
+                    </div>
+                    <div class="centered red-color" ng-if="productForm.pCategory.$error && productForm.pCategory.$touched">
+                        <p ng-if="productForm.pCategory.$error.required">You must select a category.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="centered margin-top-20">
+                <button type="submit" class="btn btn-primary button-width" ng-if="!productCtrl.isProductFormReadonly" ng-disabled="productCtrl.isExpirationDateTooEarly">Ok</button>
+                <button type="button" class="btn btn-default button-width" ng-click="productCtrl.resetProductForm()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
