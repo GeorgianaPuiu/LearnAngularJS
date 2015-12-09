@@ -17,7 +17,7 @@
                 </span>
             </td>
             <td class="td-for-buttons centered">
-                <button type="button" class="btn btn-default button-width" ng-click="productCtrl.isProductFormVisible = true">
+                <button type="button" class="btn btn-default button-width" ng-click="productCtrl.isProductFormVisible = true" title="Add new product">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
             </td>
@@ -33,20 +33,21 @@
             <td>{{product.EntryDate | date:'fullDate'}}</td>
             <td>{{product.ExpirationDate | date :'fullDate'}}</td>
             <td class="td-for-buttons">
-                <button type="button" class="btn btn-default" ng-click="productCtrl.readProduct(product.ID)">
+                <button type="button" class="btn btn-default" ng-click="productCtrl.readProduct(product.ID)" title="Read product details">
                     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
                 </button>
 
-                <button type="button" class="btn btn-default" ng-click="productCtrl.editProduct(product.ID)">
+                <button type="button" class="btn btn-default" ng-click="productCtrl.editProduct(product.ID)" title="Edit this product">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                 </button>
 
-                <button type="button" class="btn btn-default" ng-click="productCtrl.deleteProduct(product.ID)">
+                <button type="button" class="btn btn-default" ng-click="productCtrl.deleteProduct(product.ID)" title="Delete this product">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button>
-                <!-- 
-                    <span  ng-click='productCtrl.openModalWithProductDetails(product.ID)'>modal</span> 
-                -->
+                </button>   
+                <a href ui-sref="productsState.productState({productID: product.ID})" data-ui-sref-opts="{reload:true}" 
+                   data-toggle="modal" data-target="truckModal" class="btn btn-default" title="Open this product details in modal window">
+                    <span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span>
+                </a>
             </td>
         </tr>
     </table>

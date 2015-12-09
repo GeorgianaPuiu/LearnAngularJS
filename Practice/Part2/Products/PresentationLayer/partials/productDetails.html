@@ -1,0 +1,73 @@
+<div class="modal-header">
+    <h4 class="modal-title">Product details</h4>
+</div>
+
+<div class="modal-body">
+    <div ng-if="productDetailsCtrl.error" class="alert alert-danger centered" role="alert">
+        {{productDetailsCtrl.error.statusText}}
+    </div>
+
+    <div ng-if="productDetailsCtrl.product" class="alert alert-success" role="alert">
+        <!--Product name field-->
+        <div class="form-group">
+            <label>Name: </label>
+            <span>
+                {{productDetailsCtrl.product.Name}} 
+            </span>
+
+        </div>
+
+        <!--Product stock field-->
+        <div class="form-group">
+            <label>Stock: </label>
+            <span>
+                {{productDetailsCtrl.product.Stock}}
+            </span>
+        </div>
+
+
+        <!--Product price field-->
+        <div class="form-group">
+            <label>Price: </label>
+            <span>
+                {{productDetailsCtrl.product.Price}}
+            </span>
+        </div>
+
+        <!--Product entry date field-->
+
+        <div class="form-group">
+            <label>Entry date: </label>
+            <span>
+                {{productDetailsCtrl.product.EntryDate | date: 'yyyy-MM-dd'}}
+            </span>
+        </div>
+
+        <!--Product expiration date field-->
+        <div class="form-group">
+            <label>Expiration date: </label>
+            <span >
+                {{productDetailsCtrl.product.ExpirationDate | date: 'yyyy-MM-dd'}}
+            </span>
+        </div>
+
+        <!--Product description field -->
+        <div class="form-group" ng-if="productDetailsCtrl.product.Description">
+            <label>Description: </label>
+            <span>
+                {{productDetailsCtrl.product.Description}}
+            </span>
+        </div>
+
+        <!--Product category field-->
+        <div class="form-group">
+            <label>Category: </label>
+            <span >
+                {{productDetailsCtrl.product.Category.Name}}
+            </span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="productDetailsCtrl.close()">Close</button>
+    </div>
+</div>

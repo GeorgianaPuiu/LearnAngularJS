@@ -11,8 +11,8 @@
         self.isProductFormVisible = false;
         self.isProductFormReadonly = false;
         self.isFormDataForAddProduct = true;
-        self.isExpirationDateTooEarly = false;  
-
+        self.isExpirationDateTooEarly = false;
+        
         //Spinner
         self.isSpinnerVisible = true;
 
@@ -33,17 +33,17 @@
         function refreshProductsList() {
             ProductService.getAllProducts()
                 .then(function (result) {
-                self.isSpinnerVisible = false;
-                self.products = result.data;
-            });
+                    self.isSpinnerVisible = false;
+                    self.products = result.data;
+                });
         }
 
         function initProductTable() {
             ProductService.getProductTableHeader()
                 .then(function (result) {
-                self.productTableHeaderItems = result;
-                self.orderCriteria = self.productTableHeaderItems[0].key;
-            });
+                    self.productTableHeaderItems = result;
+                    self.orderCriteria = self.productTableHeaderItems[0].key;
+                });
             refreshProductsList();
         }
 
@@ -102,10 +102,10 @@
         function readProduct(id) {
             ProductService.getProductById(id)
                 .then(function (result) {
-                self.newProduct = result.data;
-                self.isProductFormReadonly = true;
-                self.isProductFormVisible = true;
-            });
+                    self.newProduct = result.data;
+                    self.isProductFormReadonly = true;
+                    self.isProductFormVisible = true;
+                });
         }
 
         function editProduct(id) {
@@ -124,11 +124,10 @@
             self.isSpinnerVisible = true;
             ProductService.deleteProductById(id)
                 .then(function (result) {
-                $log.info("deleted " + result.data);
-                refreshProductsList();
-            });
-        }        
-
+                    $log.info("deleted " + result.data);
+                    refreshProductsList();
+                });
+        }
         initProductTable();
     }
 })();

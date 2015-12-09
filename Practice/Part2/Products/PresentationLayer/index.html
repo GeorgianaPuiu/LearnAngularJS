@@ -15,7 +15,7 @@
             <div class="padding-left-100" ng-controller="HeaderCtrl as headerCtrl">   
                 <ul class="nav nav-tabs">
                     <li role="presentation" ng-class="{ active: headerCtrl.isActive('/')}"><a href="#/">Home</a></li>
-                    <li role="presentation" ng-class="{ active: headerCtrl.isActive('/products')}"><a href="#/products">Products</a></li>
+                    <li role="presentation" ng-class="{ active: headerCtrl.isActive('/products')}"><a href="#/products" ui-sref="productsState" >Products</a></li>
                     <li role="presentation" ng-class="{ active: headerCtrl.isActive('/contact')}"><a href="#/contact">Contact</a></li>
                 </ul>                  
              </div>            
@@ -26,18 +26,22 @@
         </div>
     
         <div ng-view></div>
-        
+              
         <script src="scripts/angular.js"></script>
         <script src="scripts/angular-resource.min.js"></script>
         <script src="scripts/i18n/angular-locale_en-us.js"></script>
         <script src='scripts/angular-messages.min.js'></script>
         <script src="scripts/angular-route.min.js"></script>
+        <script src="scripts/angular-ui-router.js"></script>
+        <script src="scripts/ui-bootstrap-tpls-0.14.3.js"></script>
 
+        
         <script src="src/main.js"></script>
         <script src="src/services/productService.js"></script>
         <script src="src/controllers/productController.js"></script>
         <script src="src/services/categoryService.js"></script>
         <script src="src/controllers/categoryController.js"></script>
         <script src="src/controllers/headerController.js"></script>
+        <script src="src/controllers/productDetailsController.js"></script>
     </body>
 </html>
