@@ -22,6 +22,7 @@
         self.resetProductForm = resetProductForm;
         self.submitProductForm = submitProductForm;
         self.checkExpirationDate = checkExpirationDate;
+        self.openProductFormToAddData = openProductFormToAddData;
 
 
         //Product CRUD Operations
@@ -128,6 +129,13 @@
                     refreshProductsList();
                 });
         }
+                
+        function openProductFormToAddData()
+        {
+            self.isProductFormVisible = true;
+            self.newProduct = null;
+        }       
+        
         initProductTable();
     }
 })();

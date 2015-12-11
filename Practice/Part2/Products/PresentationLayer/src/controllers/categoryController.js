@@ -16,6 +16,7 @@
             newCateg.$save().then(function () {
                 self.categories = CategoryService.query();
                 self.isCategoryFormVisible = false;
+                self.newCategory = null;
             });
         }
     }
