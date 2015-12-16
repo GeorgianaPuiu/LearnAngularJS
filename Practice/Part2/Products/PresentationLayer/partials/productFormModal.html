@@ -1,0 +1,97 @@
+
+
+<div class="modal-header">
+    <h4 class="modal-title">Product details form</h4>
+</div>
+
+<div class="modal-body">
+  <!--  <div ng-controller="ProductFormCtrl as productFormCtrl"> -->
+        <form name="productForm" class="product-form-container" >
+            <!--Product name field-->
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" ng-model="productFormCtrl.product.Name" name="pName" class="form-control" 
+                       ng-minlength="3" ng-maxlength="30" required>
+            </div>                
+            <div class="centered red-color" ng-messages='productForm.pName.$error' ng-if="productForm.pName.$touched">
+                <div ng-messages-include="templates/messages.html"></div>
+            </div>
+
+            <!--Product stock field-->
+            <div class="form-group">
+                <label>Stock</label>
+                <input type="number" ng-model="productFormCtrl.product.Stock" name="pStock" class="form-control" 
+                       step="1" required ng-min="1" ng-max="50">
+            </div>
+            <div class="centered red-color" ng-messages='productForm.pStock.$error' ng-if="productForm.pStock.$touched">
+                <p ng-message="min">The stock must be at least 1.</p>
+                <p ng-message="max">The stock must be smaller than 50.</p>
+                <div ng-messages-include="templates/messages.html"></div>
+            </div>
+
+            <!--Product price field-->
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" step="0.01" ng-model="productFormCtrl.product.Price" name="pPrice" class="form-control" 
+                       required ng-min="0.01">
+            </div>                
+            <div class="centered red-color" ng-messages='productForm.pPrice.$error' ng-if="productForm.pPrice.$touched">
+                <p ng-message="min">The price must be at least {{0.01|currency}}.</p>
+                <div ng-messages-include="templates/messages.html"></div>
+            </div>
+    
+            <!--Product expiration date field-->
+            <div class="form-group">
+                <label>Expiration date</label>
+                <input type="date" ng-model="productFormCtrl.product.ExpirationDate" class="form-control" name="pExpDate" required
+                       ng-blur="productFormCtrl.checkExpirationDate()" placeholder="yyyy-mm-dd">
+            </div>
+            <div class="centered red-color" ng-messages='productForm.pExpDate.$error' ng-if="productForm.pExpDate.$touched">
+                <p ng-if="productFormCtrl.isExpirationDateTooEarly">The expiration date must be grather than {{productFormCtrl.today| date: 'yyyy-MM-dd'}}.</p>
+                <div ng-messages-include="templates/messages.html"></div>
+            </div>
+
+            <!--Product description field -->
+            <div class="form-group">
+                <label>Description</label>
+                <textarea ng-model="productFormCtrl.product.Description" class="form-control" name="pDescription"></textarea>
+            </div>
+
+            <!--Product category field-->
+            <div class="form-group">
+                <label>Category</label>
+
+                <div ng-controller="CategoryCtrl as categoryCtrl">
+                    <span>
+                        <button title="Add new category" ng-if="!categoryCtrl.isCategoryFormVisible" ng-click="categoryCtrl.isCategoryFormVisible = true"
+                                class="btn btn-default btn-sm position-relative">
+                            New category
+                        </button>
+                        <button title="Close" ng-if="categoryCtrl.isCategoryFormVisible" ng-click="categoryCtrl.isCategoryFormVisible = false" class="position-relative">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                    </span>
+
+                    <!--Category form -->
+                    <div ng-if="categoryCtrl.isCategoryFormVisible" ng-include="'templates/categoryForm.html'"></div>
+
+                    <div class="form-group">
+                        <select ng-model="productFormCtrl.product.CategoryID" ng-options="category.ID as category.Name for category in categoryCtrl.categories"
+                                name="pCategory" class="form-control" required>
+                            <option value="">-- Choose category --</option>
+                        </select>
+                    </div>
+                    <div class="centered red-color" ng-if="productForm.pCategory.$error && productForm.pCategory.$touched">
+                        <p ng-if="productForm.pCategory.$error.required">You must select a category.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="centered margin-top-20">
+                <button type="submit" class="btn btn-primary button-width" ng-disabled="productFormCtrl.isExpirationDateTooEarly" 
+                        ng-click="productFormCtrl.submitProductForm()" ng-if='productForm.$valid' >Ok</button>
+                <button type="button" class="btn btn-default button-width" ng-click="productFormCtrl.closeModal()">Cancel</button>
+            </div>
+        </form>
+ <!--   </div> -->
+</div>

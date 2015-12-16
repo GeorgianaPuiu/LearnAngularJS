@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app')
-        .controller('ProductDetailsCtrl', ['$stateParams', 'ProductService', '$modalInstance', ProductDetailsCtrl]);
+        .controller('ReadProductCtrl', ['$stateParams', 'ProductService', '$modalInstance', ReadProductCtrl]);
 
-    function ProductDetailsCtrl($stateParams, ProductService, $modalInstance) {
+    function ReadProductCtrl($stateParams, ProductService, $modalInstance) {
         var self, productID;
         self = this;
         productID = $stateParams.productID;

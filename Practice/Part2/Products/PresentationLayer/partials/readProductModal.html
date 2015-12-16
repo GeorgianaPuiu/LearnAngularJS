@@ -3,16 +3,16 @@
 </div>
 
 <div class="modal-body">
-    <div ng-if="productDetailsCtrl.error" class="alert alert-danger centered" role="alert">
-        {{productDetailsCtrl.error.statusText}}
+    <div ng-if="readProductCtrl.error" class="alert alert-danger centered" role="alert">
+        {{readProductCtrl.error.statusText}}
     </div>
 
-    <div ng-if="productDetailsCtrl.product" class="alert alert-success" role="alert">
+    <div ng-if="readProductCtrl.product" class="alert alert-success" role="alert">
         <!--Product name field-->
         <div class="form-group">
             <label>Name: </label>
             <span>
-                {{productDetailsCtrl.product.Name}} 
+                {{readProductCtrl.product.Name}} 
             </span>
 
         </div>
@@ -21,7 +21,7 @@
         <div class="form-group">
             <label>Stock: </label>
             <span>
-                {{productDetailsCtrl.product.Stock}}
+                {{readProductCtrl.product.Stock}}
             </span>
         </div>
 
@@ -30,7 +30,7 @@
         <div class="form-group">
             <label>Price: </label>
             <span>
-                {{productDetailsCtrl.product.Price}}
+                {{readProductCtrl.product.Price}}
             </span>
         </div>
 
@@ -39,7 +39,7 @@
         <div class="form-group">
             <label>Entry date: </label>
             <span>
-                {{productDetailsCtrl.product.EntryDate | date: 'yyyy-MM-dd'}}
+                {{readProductCtrl.product.EntryDate | date: 'yyyy-MM-dd'}}
             </span>
         </div>
 
@@ -47,15 +47,15 @@
         <div class="form-group">
             <label>Expiration date: </label>
             <span >
-                {{productDetailsCtrl.product.ExpirationDate | date: 'yyyy-MM-dd'}}
+                {{readProductCtrl.product.ExpirationDate | date: 'yyyy-MM-dd'}}
             </span>
         </div>
 
         <!--Product description field -->
-        <div class="form-group" ng-if="productDetailsCtrl.product.Description">
+        <div class="form-group" ng-if="readProductCtrl.product.Description">
             <label>Description: </label>
             <span>
-                {{productDetailsCtrl.product.Description}}
+                {{readProductCtrl.product.Description}}
             </span>
         </div>
 
@@ -63,11 +63,11 @@
         <div class="form-group">
             <label>Category: </label>
             <span >
-                {{productDetailsCtrl.product.Category.Name}}
+                {{readProductCtrl.product.Category.Name}}
             </span>
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" ng-click="productDetailsCtrl.close()">Close</button>
+        <button type="button" class="btn btn-default" ng-click="readProductCtrl.close()">Close</button>
     </div>
 </div>
