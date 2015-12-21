@@ -49,7 +49,7 @@
                             size : 'sm'
                         }).result.finally(function () {
                             $state.go('^');
-                            console.log('this is finally read modal');
+                        //    console.log('this is finally read modal');
                         });
                     }
                 ]
@@ -68,7 +68,7 @@
                         size : 'lg'
                     }).result.finally(function () {
                         $state.go('productsState');
-                        console.log('this is finally create/edit modal');
+                     //   console.log('this is finally create/edit modal');
                     });
                 }
             ]

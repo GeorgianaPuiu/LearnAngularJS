@@ -14,9 +14,20 @@
         //Products table
         self.setOrderCriteria = setOrderCriteria;
         self.getOrderClass = getOrderClass;
-        
+
         self.deleteProduct = deleteProduct;
 
+        self.notifications = {
+            edit : {
+                msg: 'If you edit any product, the changes will be applied immediately.',
+                msgType: 'info'
+            },
+            delete: {
+                msg: 'Are you sure you want to delete the product?',
+                msgType: 'warning'
+            }
+        };            
+           
 
         function refreshProductsList() {
             ProductService.getAllProducts()
@@ -63,6 +74,7 @@
                 refreshProductsList();
             });
         }
+
         initProductTable();
 
         /*
@@ -72,8 +84,8 @@
         */
         $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             $log.info("state change success from " + fromState.name + " to state " + toState.name);
-            if(toState.name === 'productsState'){
-               
+            if (toState.name === 'productsState') {
+
                 refreshProductsList();
                 $log.info('The table was initializated and the products refreshed');
             }
