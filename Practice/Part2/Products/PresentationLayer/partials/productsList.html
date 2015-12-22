@@ -1,0 +1,63 @@
+<div ng-controller="ProductsListCtrl as productsListCtrl" class="product-container margin-top-50">
+
+    <div ng-if="productsListCtrl.products.length == 0" class="centered blue margin-top-50 margin-bottom-50">
+        No products yet. You should add new ones.
+    </div>
+
+    <!--Search in products-->
+    <div class="position-relative margin-bottom-20">
+        <input ng-model="search_word" class="form-control" placeholder='Search in products ...' />
+    </div>
+
+
+    <table class="table table-bordered" ng-cloak>
+        <tr>
+            <td ng-repeat="item in productsListCtrl.productTableHeaderItems">
+                <span ng-click="productsListCtrl.setOrderCriteria(item.key)" ng-class="productsListCtrl.getOrderClass(item.key)" class="theader">
+                    {{item.value}}
+                </span>
+            </td>
+            <td class="td-for-buttons centered">
+                <a href ui-sref="productsState.openProductFormModalState()" data-ui-sref-opts="{reload:true}" 
+                   data-toggle="modal" data-target="truckModal" class="btn btn-default button-width" title="Add new product in modal">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </a>
+            </td>
+        </tr>
+
+        <tr ng-repeat="product in productsListCtrl.products | orderBy : productsListCtrl.orderCriteria : productsListCtrl.orderAsc | filter : search_word" 
+            ng-class="[{'light-blue': $odd}, {'light-gray':$even }]">
+            <td>{{product.Name}}</td>
+            <td>{{product.Stock}}</td>
+            <td>{{product.Price | currency}}</td>
+            <td>{{product.Category.Name}}</td>
+            <td>{{product.EntryDate | date:'fullDate'}}</td>
+            <td>{{product.ExpirationDate | date :'fullDate'}}</td>
+            <td class="td-for-buttons">
+                <!--Read -->
+                <a href ui-sref="productsState.readProductState({productID: product.ID})" data-ui-sref-opts="{reload:true}" 
+                   data-toggle="modal" data-target="truckModal" class="btn btn-default" title="Read this product details in modal window">
+                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                </a>
+
+                <!--Edit --> 
+                <my-directive-alert-modal ng-model="productsListCtrl.notifications.edit" class="btn btn-default" title="Edit this product details in modal window"
+                                          state="productsState.openProductFormModalState" product-id="{{product.ID}}" span-style="pencil">
+                </my-directive-alert-modal>
+
+
+                <!--Delete-->
+                <my-directive-alert-modal ng-model='productsListCtrl.notifications.delete' class="btn btn-default" title="Delete this product"
+                                          delete-product-fn='productsListCtrl.deleteProduct(product.ID)' product-id='{{product.ID}}' span-style='trash' >
+                </my-directive-alert-modal>
+
+            </td>
+        </tr>
+    </table>
+
+    <!--Spinner -->
+    <div ng-if="productsListCtrl.isSpinnerVisible" class="width-full centered">               
+        <img src="images/spinner.gif" alt="Loading, please wait!" class="spinner-sizes">              
+    </div>
+
+</div>

@@ -1,0 +1,72 @@
+<div class="modal-header">
+    <h4 class="modal-title">Product details</h4>
+</div>
+
+<div class="modal-body">
+    <div ng-if="readProductCtrl.error" class="alert alert-danger centered" role="alert">
+        {{readProductCtrl.error.statusText}}
+    </div>
+
+    <div ng-if="readProductCtrl.product" class="alert alert-success" role="alert">
+        <!--Product name field-->       
+        <div class="form-group">
+            <label>Name: </label>
+            <span>
+                {{readProductCtrl.product.name}}
+            </span>
+        </div>
+   
+        <!--Product stock field-->
+        <div class="form-group">
+            <label>Stock: </label>
+            <span>
+                {{readProductCtrl.product.Stock}}
+            </span>
+        </div>
+
+
+        <!--Product price field-->
+        <div class="form-group">
+            <label>Price: </label>
+            <span>
+                {{readProductCtrl.product.Price}}
+            </span>
+        </div>
+
+        <!--Product entry date field-->
+
+        <div class="form-group">
+            <label>Entry date: </label>
+            <span>
+                {{readProductCtrl.product.EntryDate | date: 'yyyy-MM-dd'}}
+            </span>
+        </div>
+
+        <!--Product expiration date field-->
+        <div class="form-group">
+            <label>Expiration date: </label>
+            <span >
+                {{readProductCtrl.product.ExpirationDate | date: 'yyyy-MM-dd'}}
+            </span>
+        </div>
+
+        <!--Product description field -->
+        <div class="form-group" ng-if="readProductCtrl.product.Description">
+            <label>Description: </label>
+            <span>
+                {{readProductCtrl.product.Description}}
+            </span>
+        </div>
+
+        <!--Product category field-->
+        <div class="form-group">
+            <label>Category: </label>
+            <span >
+                {{readProductCtrl.product.Category.Name}}
+            </span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="readProductCtrl.close()">Close</button>
+    </div>
+</div>

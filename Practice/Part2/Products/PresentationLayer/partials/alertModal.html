@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <h4 class="modal-title">Alert message</h4>
+</div>
+
+<div class="modal-body centered">
+    <div class="alert alert-{{notification.msgType}}" role="alert">
+        {{notification.msg}}
+    </div>
+    <div class="modal-footer centered">
+        <button type="button" class="btn btn-primary button-width" ng-click="Ok()">Ok</button>
+        <button type="button" class="btn btn-default button-width" ng-click="Close()">Close</button>
+    </div>
+</div>
