@@ -1,7 +1,8 @@
+/*global angular */
 (function () {
     'use strict';
 
-    angular.module('app', ['ngResource', 'ngMessages', 'ngRoute', 'ui.router' , 'ui.bootstrap', 'ui.bootstrap.modal', 'ui.bootstrap.popover', 'ui.bootstrap.tpls'])
+    angular.module('app', ['ngResource', 'ngMessages', 'ngRoute', 'ui.router', 'ui.bootstrap', 'ui.bootstrap.modal', 'ui.bootstrap.popover', 'ui.bootstrap.tpls'])
         .constant('apiUrlBase', 'http://localhost:8083/')
         .config(['$routeProvider', '$stateProvider', '$urlRouterProvider', Config]);
 
@@ -23,7 +24,7 @@
     //        .otherwise({
     //        redirectTo: '/'
     //    });
-    */       
+    */
 
         $stateProvider
             .state('homeState', {
@@ -55,26 +56,25 @@
                 ]
             })
             .state('productsState.openProductFormModalState', {
-            url: '/product/:productID',
-            params: {
-                productID: { squash: true, value: null }                
-            },
-            onEnter: [
-                '$modal', '$state', function ($modal, $state) {
-                    $modal.open({
-                        controller: 'ProductFormCtrl',
-                        controllerAs: 'productFormCtrl',
-                        templateUrl: 'partials/productFormModal.html',
-                        size : 'lg'
-                    }).result.finally(function () {
-                        $state.go('productsState');
-                     //   console.log('this is finally create/edit modal');
-                    });
-                }
-            ]
-        });
+                url: '/product/:productID',
+                params: {
+                    productID: { squash: true, value: null }
+                },
+                onEnter: [
+                    '$modal', '$state', function ($modal, $state) {
+                        $modal.open({
+                            controller: 'ProductFormCtrl',
+                            controllerAs: 'productFormCtrl',
+                            templateUrl: 'partials/productFormModal.html',
+                            size : 'lg'
+                        }).result.finally(function () {
+                            $state.go('productsState');
+                         //   console.log('this is finally create/edit modal');
+                        });
+                    }
+                ]
+            });
                 
         $urlRouterProvider.otherwise('/');
     }
 })();
-
