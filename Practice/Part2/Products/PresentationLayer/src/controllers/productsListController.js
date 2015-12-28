@@ -18,7 +18,7 @@
         self.deleteProduct = deleteProduct;
 
         self.notifications = {
-            edit : {
+            edit: {
                 msg: 'If you edit any product, the changes will be applied immediately.',
                 msgType: 'info'
             },
@@ -26,23 +26,22 @@
                 msg: 'Are you sure you want to delete the product?',
                 msgType: 'warning'
             }
-        };            
-           
+        };
 
         function refreshProductsList() {
             ProductService.getAllProducts()
                 .then(function (result) {
-                self.isSpinnerVisible = false;
-                self.products = result.data;
-            });
+                    self.isSpinnerVisible = false;
+                    self.products = result.data;
+                });
         }
 
         function initProductTable() {
             ProductService.getProductTableHeader()
                 .then(function (result) {
-                self.productTableHeaderItems = result;
-                self.orderCriteria = self.productTableHeaderItems[0].key;
-            });
+                    self.productTableHeaderItems = result;
+                    self.orderCriteria = self.productTableHeaderItems[0].key;
+                });
             refreshProductsList();
         }
 
@@ -70,24 +69,18 @@
             self.isSpinnerVisible = true;
             ProductService.deleteProductById(id)
                 .then(function (result) {
-                $log.info("deleted " + result.data);
-                refreshProductsList();
-            });
+                    // $log.info("deleted " + result.data);
+                    refreshProductsList();
+                });
         }
 
         initProductTable();
 
-        /*
-        $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            $log.info("state change start from " + fromState.name + " to state " + toState.name);
-        });
-        */
         $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-            $log.info("state change success from " + fromState.name + " to state " + toState.name);
+            //$log.info("state change success from " + fromState.name + " to state " + toState.name);
             if (toState.name === 'productsState') {
-
                 refreshProductsList();
-                $log.info('The table was initializated and the products refreshed');
+                // $log.info('The table was initializated and the products refreshed');
             }
         });
     }

@@ -1,6 +1,7 @@
+/*global angular*/
 (function () {
     'use strict';
-    angular.module('app').directive('myDirectiveAlertModal', ['$log', '$modal', '$state', function ($log, $modal, $state) {
+    angular.module('app').directive('myDirectiveAlertModal', ['$modal', '$state', function ($modal, $state) {
         return {
             restrict: 'E',
             require: 'ngModel',
@@ -12,39 +13,16 @@
                 _spanStyle: '@spanStyle',
                 _state: '@state'
             },
-            link: function ($scope, $element, $attrs) {
-                var self = $scope;
-
-                var ModalInstanceCtrl = function ($scope, $modalInstance) {
-                    $scope.notification = self._notification;
-
-                    $scope.Close = function () {
-                        $modalInstance.dismiss('cancel');
-                    };
-
-                    $scope.Ok = function () {
-                        var p_id = self._productID;
-                        
-                        if (self._state) {
-                            $state.go(self._state, {
-                                productID: self._productID
-                            });
-                        } else {
-                            self._deleteProductFn({
-                                id: p_id
-                            });
-                        }
-                        $scope.Close();
-                    };
-                };
-
-                $scope.open = function () {
-                    var modalInstance = $modal.open({
-                        templateUrl: 'partials/alertModal.html',
-                        controller: ModalInstanceCtrl
+            link: function (scope, element, attrs) {
+                scope.open = function () {
+                    $modal.open({
+                        templateUrl: 'partials/myDirectiveAlertModal.html',
+                        controller: 'AlertModalCtrl',
+                        controllerAs: 'alertModalCtrl',
+                        scope: scope
                     });
                 };
             }
-        }
+        };
     }]);
-})()
+})();

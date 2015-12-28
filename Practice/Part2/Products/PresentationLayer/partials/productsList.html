@@ -8,8 +8,7 @@
     <div class="position-relative margin-bottom-20">
         <input ng-model="search_word" class="form-control" placeholder='Search in products ...' />
     </div>
-
-
+    
     <table class="table table-bordered" ng-cloak>
         <tr>
             <td ng-repeat="item in productsListCtrl.productTableHeaderItems">
@@ -56,8 +55,10 @@
     </table>
 
     <!--Spinner -->
-    <div ng-if="productsListCtrl.isSpinnerVisible" class="width-full centered">               
-        <img src="images/spinner.gif" alt="Loading, please wait!" class="spinner-sizes">              
+    <div ng-if="productsListCtrl.isSpinnerVisible" class="width-full centered">  
+        <div class="modal-body" >
+            <img src="images/spinner.gif" alt="Loading, please wait!" class="spinner-sizes">   
+        </div>                  
     </div>
 
 </div>

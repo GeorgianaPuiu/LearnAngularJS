@@ -21,12 +21,12 @@
         if (productID) { //if the id is in te url then is update
             ProductService.getProductById(productID)
                 .then(function (result) {
-                self.product = result.data;
-                self.product.ExpirationDate = new Date(self.product.ExpirationDate);
-                self.product.EntryDate = new Date(self.product.EntryDate);
-            }, (function (reason) {
-                self.error = reason;
-            }));
+                    self.product = result.data;
+                    self.product.ExpirationDate = new Date(self.product.ExpirationDate);
+                    self.product.EntryDate = new Date(self.product.EntryDate);
+                }, (function (reason) {
+                    self.error = reason;
+                }));
         }
 
 
@@ -46,8 +46,8 @@
 
         function closeModal() {
             $modalInstance.close();
-        };
-
+        }
+        
         function checkExpirationDate() {
             var expDate = self.product.ExpirationDate;
             if (expDate < self.today) {

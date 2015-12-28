@@ -1,3 +1,4 @@
+/*global angular*/
 (function () {
     'use strict';
     
@@ -7,7 +8,7 @@
     function HeaderCtrl($location) {
         var self = this;
         
-        self.isActive = function (viewLocation) { 
+        self.isActive = function (viewLocation) {
             return viewLocation === $location.path();
         };
     }
