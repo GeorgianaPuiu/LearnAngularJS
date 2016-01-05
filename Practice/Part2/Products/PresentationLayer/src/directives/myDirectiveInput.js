@@ -1,4 +1,4 @@
-/*global angular, console*/
+/*global angular*/
 (function () {
     'use strict';
     angular.module('app').directive('myDirectiveInput', [function () {
@@ -12,41 +12,45 @@
                 _cssClass: '@cssClass'
             },
             templateUrl: 'partials/myDirectiveInput.html',
-            link: function (scope, element, attrs, ngModel) {
-                var inputElement, writtenChar, isWrittenCharOk;
+            link: function (scope, element, attrs, ngModelCtrl) {
+                var inputElement;
 
                 inputElement = element[0].childNodes[3];
                 scope._inputName = attrs.name;
 
-                ngModel.$render = function () {
-                    inputElement.value = ngModel.$viewValue;
+                ngModelCtrl.$render = function () {
+                    scope.ngModel = ngModelCtrl.$modelValue; // do not use inputElement.value                        
                 };
 
                 inputElement.onkeypress = function (event) {
-                    writtenChar = event.which;
-                    isWrittenCharOk = false;
-
-                    switch (scope._elementType) {
-                    case 'text':
-                        isWrittenCharOk = isLetter(String.fromCharCode(writtenChar));
-                        break;
-                    case 'number':
-                        isWrittenCharOk = isNumber(String.fromCharCode(writtenChar));
-                        break;
-                    }
-                    if (!isWrittenCharOk) {
+                    var typedChar = String.fromCharCode(event.which);
+                    if (!isValid(typedChar, scope._elementType)) {
                         event.preventDefault();
                     }
                 };
 
                 inputElement.onblur = function () {
                     scope.$apply(function () {
-                        ngModel.$setViewValue(inputElement.value, 'onblur');
+                        ngModelCtrl.$setViewValue(scope.ngModel, 'onblur');
                     });
                 };
             }
-        }
+        };
     }]);
+
+    function isValid(character, type) {
+        if (character) {
+            switch (type) {
+            case 'text':
+                return isLetter(character);
+            case 'number':
+                return isNumber(character);
+            default:
+                return false;
+            }
+        }
+        return false;
+    }
 
     function isLetter(character) {
         var regex = /^[a-zA-Z]+$/;
